@@ -99,6 +99,16 @@ class Kariba:
         if self.current_player == len(self.players):
             self.current_player = 0
 
+    def identify_winner(self):
+        winner = ""
+        best_score = 0
+        for p in self.players_dic.keys():
+            if len(self.players_dic[p]['taken']) > best_score:
+                winner = p
+                best_score = len(self.players_dic[p]['taken'])
+        return winner, best_score
+
+
     def game_on(self):
         if self.cards:
             return True
@@ -124,12 +134,8 @@ if __name__ == "__main__":
             kariba.switch_player()
 
     kariba.display_current_status()
-    winner = ""
-    best_score = 0
-    for p in kariba.players_dic.keys():
-        if len(kariba.players_dic[p]['taken']) > best_score:
-            winner = p
-            best_score = len(kariba.players_dic[p]['taken'])
-    print("The winner is", winner)
+
+    winner, score = kariba.identify_winner()
+    print("The winner is", winner, "with", score, "points.")
 
 
