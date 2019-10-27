@@ -24,6 +24,7 @@ class Kariba:
         for i in range(8):
             self.board.append([])
         self.current_player = 0
+        self.last_to_play = -1
 
     def take_cards(self, n):
         if len(self.cards) > n:
@@ -72,7 +73,8 @@ class Kariba:
                         self.players_dic[player]['taken'].extend(self.board[i])
                         self.board[i] = []
                         break
-        self.players_dic[player]['hand'].extend(self.take_cards(n_cards))
+        if self.last_to_play == -1:
+            self.players_dic[player]['hand'].extend(self.take_cards(n_cards))
         self.players_dic[player]['hand'].sort()
         return True
 
@@ -100,17 +102,34 @@ class Kariba:
     def game_on(self):
         if self.cards:
             return True
+        elif self.last_to_play == -1:
+            self.last_to_play = self.current_player
+            return True
+        elif self.last_to_play == self.current_player:
+            return False
+        return True
 
-kariba = Kariba()
-kariba.start_game(["A","B"])
-while kariba.game_on():
+if __name__ == "__main__":
+    kariba = Kariba()
+    kariba.start_game(["A","B"])
+    while kariba.game_on():
+        kariba.display_current_status()
+        player = kariba.players[kariba.current_player]
+        print("Your turn", player)
+        #print("Your hand:", kariba.players_dic[player]['hand'])
+        position = int(input("Where would you like to play? "))
+        n_cards = int(input("How many cards would you like to play? "))
+        play_is_good = kariba.handle_play(player, int(position), int(n_cards))
+        if play_is_good:
+            kariba.switch_player()
+
     kariba.display_current_status()
-    player = kariba.players[kariba.current_player]
-    print("Your turn", player)
-    #print("Your hand:", kariba.players_dic[player]['hand'])
-    position = int(input("Where would you like to play? "))
-    n_cards = int(input("How many cards would you like to play? "))
-    play_good = kariba.handle_play(player, int(position), int(n_cards))
-    if play_good:
-        kariba.switch_player()
+    winner = ""
+    best_score = 0
+    for p in kariba.players_dic.keys():
+        if len(kariba.players_dic[p]['taken']) > best_score:
+            winner = p
+            best_score = len(kariba.players_dic[p]['taken'])
+    print("The winner is", winner)
+
 
