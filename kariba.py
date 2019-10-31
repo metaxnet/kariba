@@ -1,5 +1,5 @@
 import random
-from BardaPlayers import *
+from DefaultPlayers import *
 import itertools
 
 class Kariba:
