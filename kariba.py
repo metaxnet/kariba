@@ -177,7 +177,7 @@ def interactive_player():
 
 if __name__ == "__main__":
     GAMES_TO_PLAY = 1000
-    players = [LowestCardPlayer(), HighestCardPlayer(), GreedyPlayer(), RandomPlayer()]
+    players = [LowestCardPlayer(), HighestCardPlayer(), GreedyPlayer(), RandomPlayer(), GreedyPlayer2()]
     
     print("Final score after %s games: " % GAMES_TO_PLAY)
     
