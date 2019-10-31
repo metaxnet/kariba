@@ -7,8 +7,8 @@ Rules:
 https://www.toysmith.com/kariba_rules_en-es/
 
 Sample run:
-> python3 kariba.py 
-Final score after 1000 games: 
+$ python3 kariba.py
+Final score after 1000 games:
 {'LowestCardPlayer': 506, 'HighestCardPlayer': 494}
 {'LowestCardPlayer': 278, 'GreedyPlayer': 722}
 {'LowestCardPlayer': 644, 'RandomPlayer': 356}
@@ -21,4 +21,5 @@ Final score after 1000 games:
 {'RandomPlayer': 402, 'LowestCardPlayer': 598}
 {'RandomPlayer': 479, 'HighestCardPlayer': 521}
 {'RandomPlayer': 235, 'GreedyPlayer': 765}
+
 
