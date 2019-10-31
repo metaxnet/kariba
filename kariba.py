@@ -1,4 +1,6 @@
 import random
+from BardaPlayers import *
+import itertools
 
 class Kariba:
     def __init__(self):
@@ -74,7 +76,7 @@ class Kariba:
                         self.board[i] = []
                         break
         if self.last_to_play == -1:
-            self.players_dic[player]['hand'].extend(self.take_cards(n_cards))
+            self.players_dic[player]['hand'].extend(self.take_cards(cards_num))
         self.players_dic[player]['hand'].sort()
         return True
 
@@ -93,6 +95,20 @@ class Kariba:
         print()
         for p in self.players:
             print(p, "Hand:", self.players_dic[p]['hand'], "Taken:", len(self.players_dic[p]['taken']))
+
+    def get_current_board(self):
+        return [len(x) for x in self.board]
+
+    def get_cards_in_deck(self):
+        return len(self.cards)
+
+    def get_player_hand(self, player):
+        if player not in self.players:
+            return "Not a Player"
+        return self.players_dic[player]['hand']
+
+    def get_player_scores(self):
+        return [(p, self.players_dic[p]['taken']) for p in self.players]
 
     def switch_player(self):
         self.current_player = self.current_player+1
@@ -119,7 +135,28 @@ class Kariba:
             return False
         return True
 
-if __name__ == "__main__":
+
+def game_manager(player1, player2):
+    kariba = Kariba()
+    kariba.start_game([player1.get_name(), player2.get_name()])
+    players = {player1.get_name(): player1, player2.get_name(): player2}
+    while kariba.game_on():
+        # kariba.display_current_status()
+        player = kariba.players[kariba.current_player]
+        # print("Your turn", player)
+        position, n_cards = players[player].get_move(kariba.get_current_board(), kariba.get_cards_in_deck(), kariba.get_player_hand(player), kariba.get_player_scores())
+        play_is_good = kariba.handle_play(player, position, n_cards)
+        
+        if play_is_good:
+            kariba.switch_player()
+    
+    # kariba.display_current_status()
+
+    winner, score = kariba.identify_winner()
+    # print("The winner is", winner, "with", score, "points.")
+    return winner
+
+def interactive_player():
     kariba = Kariba()
     kariba.start_game(["A","B"])
     while kariba.game_on():
@@ -138,4 +175,18 @@ if __name__ == "__main__":
     winner, score = kariba.identify_winner()
     print("The winner is", winner, "with", score, "points.")
 
+if __name__ == "__main__":
+    GAMES_TO_PLAY = 1000
+    players = [LowestCardPlayer(), HighestCardPlayer(), GreedyPlayer(), RandomPlayer()]
+    
+    print("Final score after %s games: " % GAMES_TO_PLAY)
+    
+    for couple in list(itertools.permutations(players, 2)):
+        player1 = couple[0]
+        player2 = couple[1]
+        score = {player1.get_name():0, player2.get_name():0}
+        for i in range(GAMES_TO_PLAY):
+            winner = game_manager(player1, player2)
+            score[winner] += 1
+        print(score)
 
