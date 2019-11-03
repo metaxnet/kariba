@@ -177,9 +177,13 @@ def interactive_player():
 
 if __name__ == "__main__":
     GAMES_TO_PLAY = 1000
-    players = [LowestCardPlayer(), HighestCardPlayer(), GreedyPlayer(), RandomPlayer(), GreedyPlayer2()]
+    players = [LowestCardPlayer(), HighestCardPlayer(), GreedyPlayer(), RandomPlayer(), GreedyPlayer2(), GreedyPlayer3()]
     
     print("Final score after %s games: " % GAMES_TO_PLAY)
+
+    allscores = {}
+    for p in players:
+        allscores[p.get_name()] = 0
     
     for couple in list(itertools.permutations(players, 2)):
         player1 = couple[0]
@@ -189,4 +193,12 @@ if __name__ == "__main__":
             winner = game_manager(player1, player2)
             score[winner] += 1
         print(score)
+        allscores[player1.get_name()] += score[player1.get_name()]
+        allscores[player2.get_name()] += score[player2.get_name()]
+
+    #print(allscores)
+    players.sort(key = lambda x: allscores[x.get_name()])
+    for p in players:
+        print("%30s | %d" % (p.get_name(), allscores[p.get_name()]))
+
 
