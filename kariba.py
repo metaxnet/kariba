@@ -14,7 +14,15 @@ class Kariba:
         return cards
 
     def start_game(self, players):
-        self.cards = self.create_cards()
+        self.deck = self.create_cards()
+        self.cards = self.deck[:]
+        self._start_game(players)
+
+    def replay_game(self, players):
+        self.cards = self.deck[:]
+        self._start_game(players)
+
+    def _start_game(self, players):
         self.players = players
         self.players_dic = {}
         for p in players:
@@ -124,7 +132,6 @@ class Kariba:
                 best_score = len(self.players_dic[p]['taken'])
         return winner, best_score
 
-
     def game_on(self):
         if self.cards:
             return True
@@ -134,6 +141,25 @@ class Kariba:
         elif self.last_to_play == self.current_player:
             return False
         return True
+
+    def dump_state(self):
+        state = {}
+        state['deck'] = self.deck
+        state['cards'] = self.cards
+        state['board'] = self.board
+        state['players_dic'] = self.players_dic
+        state['current_player'] = self.current_player
+        state['last_to_play'] = self.last_to_play
+        return state
+
+    def load_state(self, state):
+        self.deck = state['deck']
+        self.cards = state['cards']
+        self.board = state['board']
+        self.players_dic = state['players_dic']
+        self.current_player = state['current_player']
+        self.last_to_play = state['last_to_play']
+        return state
 
 
 def game_manager(player1, player2):
