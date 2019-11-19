@@ -147,6 +147,7 @@ class Kariba:
         state['deck'] = self.deck
         state['cards'] = self.cards
         state['board'] = self.board
+        state['players'] = self.players
         state['players_dic'] = self.players_dic
         state['current_player'] = self.current_player
         state['last_to_play'] = self.last_to_play
@@ -156,6 +157,7 @@ class Kariba:
         self.deck = state['deck']
         self.cards = state['cards']
         self.board = state['board']
+        self.players = state['players']
         self.players_dic = state['players_dic']
         self.current_player = state['current_player']
         self.last_to_play = state['last_to_play']
