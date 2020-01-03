@@ -27,8 +27,8 @@ class KaribaPlayer:
             return 0
         if loc == 1:
             return board[7]
-        loc -= 1
-        while loc > 0:
+        loc -= 2
+        while loc >= 0:
             if board[loc] > 0:
                 return board[loc]
             loc -=1
